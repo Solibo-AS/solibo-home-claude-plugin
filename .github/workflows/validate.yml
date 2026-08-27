@@ -24,6 +24,7 @@ jobs:
 
       - name: Validate package contract
         run: |
+          VERSION=$(jq -r '.version' .claude-plugin/plugin.json)
           jq -e '
             .name == "solibo-home" and
             .displayName == "Solibo Home" and
@@ -40,6 +41,7 @@ jobs:
             (.mcpServers["solibo-home"] | has("headers") | not) and
             (.mcpServers["solibo-home"] | has("env") | not)
           ' .mcp.json
+          grep -Fq "## [${VERSION}]" CHANGELOG.md
 
       - name: Validate with Claude Code
         run: >-
