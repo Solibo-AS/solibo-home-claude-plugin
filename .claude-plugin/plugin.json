@@ -1,0 +1,15 @@
+{
+  "name": "solibo-home",
+  "displayName": "Solibo Home",
+  "version": "1.0.0",
+  "description": "Connect Claude Code to Solibo Home to search property-management data and perform permission-gated, confirmed changes and resident communications.",
+  "author": {
+    "name": "Solibo AS",
+    "url": "https://solibo.no"
+  },
+  "homepage": "https://mcp.solibo.no",
+  "repository": "https://github.com/Solibo-AS/solibo-home-claude-plugin",
+  "keywords": ["mcp", "property-management", "solibo"],
+  "defaultEnabled": false,
+  "mcpServers": "./.mcp.json"
+}

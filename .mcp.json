@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "solibo-home": {
+      "type": "http",
+      "url": "https://mcp.home.solibo.no"
+    }
+  }
+}
