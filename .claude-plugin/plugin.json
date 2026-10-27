@@ -1,15 +1,26 @@
 {
   "name": "solibo-home",
   "displayName": "Solibo Home",
-  "version": "1.0.0",
-  "description": "Connect Claude Code to Solibo Home to search property-management data and perform permission-gated, confirmed changes and resident communications.",
+  "version": "1.2.0",
+  "description": "Use Solibo Home with your own account. Board members and property managers can review issues, meetings, documents and invoices for their housing communities; residents can find practical information, their invoices and conversations. Changes are saved only after you confirm, and the assistant sees only what your account may see.",
   "author": {
     "name": "Solibo AS",
     "url": "https://solibo.no"
   },
   "homepage": "https://mcp.solibo.no",
   "repository": "https://github.com/Solibo-AS/solibo-home-claude-plugin",
-  "keywords": ["mcp", "property-management", "solibo"],
+  "license": "MIT",
+  "icon": "./assets/solibo-home-logo.png",
+  "documentationUrl": "https://home.solibo.no/",
+  "supportUrl": "https://www.solibo.no/kontakt",
+  "privacyPolicyUrl": "https://mcp.home.solibo.no/privacy",
+  "termsOfServiceUrl": "https://home.solibo.no/privacy/",
+  "keywords": [
+    "mcp",
+    "housing",
+    "property-management",
+    "solibo"
+  ],
   "defaultEnabled": false,
   "mcpServers": "./.mcp.json"
 }
