@@ -1,0 +1,51 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "app-69ff1dc7c6fc8191812c4f6ce41f6189",
+  "version": "1.2.0",
+  "description": "Use Solibo Home with your own account. Board members and property managers can review issues, meetings, documents and invoices for their housing communities; residents can find practical information, their invoices and conversations. Changes are saved only after you confirm, and the assistant sees only what your account may see.",
+  "author": {
+    "name": "Solibo AS",
+    "url": "https://solibo.no"
+  },
+  "homepage": "https://home.solibo.no/",
+  "repository": "https://github.com/Solibo-AS/solibo-home-claude-plugin",
+  "license": "MIT",
+  "keywords": [
+    "mcp",
+    "housing",
+    "property-management",
+    "borettslag",
+    "sameie",
+    "solibo"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Solibo Home",
+        "shortDescription": "Manage property data",
+        "longDescription": "Solibo Home helps authorized property managers and board members review companies, residents, conversations, tasks, upcoming meetings, documents, maintenance, invoicing and accounting through ChatGPT. Get board briefings, compare authorized companies and inspect accounting actuals, available budgets and liquidity with source coverage and freshness. Preview communications and changes before explicit confirmation. Attach files to supported document and communication workflows; preparing an upload temporarily stores the original file before confirmation saves it in Home. Document reads return metadata and authenticated Home review links; explicit content requests return limited, filtered text, never original file bytes. Personal contact details and financial identifiers are filtered by default, with narrowly scoped authorized exceptions. Filtering does not guarantee that all personal information is removed from text or attachments. Solibo uses connection inputs and outputs to fulfil your requests, with limited audit metadata for sensitive reads and action outcomes and operational metadata to diagnose failed, slow or repeated requests. The plugin bundles skills that guide the assistant through company briefings, conversation triage, resident communication, board meetings, economy review, document filing and supplier maintenance; every change still ends in a preview that you confirm. Privacy policy: https://mcp.home.solibo.no/privacy",
+        "developerName": "Solibo AS",
+        "category": "Business & Operations",
+        "capabilities": [
+          "Company and board briefings",
+          "Conversations, cases and tasks",
+          "Board meetings and agendas",
+          "Documents and files",
+          "Invoices, accounting and economy review",
+          "Resident communication with preview and confirmation"
+        ],
+        "websiteURL": "https://home.solibo.no/",
+        "supportURL": "https://www.solibo.no/kontakt",
+        "privacyPolicyURL": "https://mcp.home.solibo.no/privacy",
+        "termsOfServiceURL": "https://home.solibo.no/privacy/",
+        "defaultPrompt": [
+          "Give me a board briefing for a Solibo Home company I manage.",
+          "Show the tasks, issues, and upcoming meetings across my Solibo Home companies.",
+          "Draft a board email for a company I select, but do not send it."
+        ],
+        "composerIcon": "./assets/solibo-home-logo.png",
+        "logo": "./assets/solibo-home-logo.png"
+      }
+    }
+  }
+}
