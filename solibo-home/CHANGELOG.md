@@ -7,6 +7,45 @@ and plugin versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-11-11
+
+### Changed
+
+- All eight skills follow the tool behaviour after the November dev retests:
+  previews refuse unknown or mismatched records before a confirmation, name
+  the records and values they change, and confirm-time errors pass on Solibo
+  Home's reason.
+- `conversation-triage`: a draft needs a category to be published or
+  restored; `create_conversation_inquiry` takes a contact category only;
+  bulk delete reports `deletedIds` and `trashedIds`; deleting a folder also
+  deletes its subfolders; `updatedSince` is the filter for "what changed".
+- `document-filing` and `economy-review`: new files come from any public
+  HTTPS download link; an existing document is reused with
+  `sourceDocumentId`; expense receipts and approvals (two different
+  approvers, `fullyApproved`) and the masked expense payout account with
+  `reveal_expense_account_numbers`; only OTHER or BUILDING archive documents
+  can be trashed.
+- `company-briefing`: `get_company_activity_digest` for "what is new".
+- `meeting-agenda`, `resident-communication`, `supplier-register` and
+  `portfolio-sweeps`: tool notes match the current inputs and outputs.
+
+### Removed
+
+- References to the removed public conversation tools
+  (`reply_to_public_conversation`, `create_public_conversation_inquiry`,
+  `remove_public_conversation_document`): the plugin always signs in.
+
+## [1.3.0] - 2026-10-28
+
+### Added
+
+- `resident-communication` covers one-off custom selections (egendefinert
+  utvalg): find the sections with `search_sections` by entrance letter,
+  apartment number or H-number, then pass `recipientSectionIds` with
+  `recipientSectionResidents` on `draft_customer_message`. The tool notes
+  list both fields. The recipe left the server instructions so they stay
+  equal to the approved live text.
+
 ## [1.2.0] - 2026-10-27
 
 ### Changed
