@@ -8,8 +8,8 @@ sees only what your account may see.
 
 The plugin bundles the hosted Solibo Home MCP server with the skills that teach
 the assistant how to use it. One folder serves both hosts; it is published whole
-to the public repository `Solibo-AS/solibo-home-claude-plugin`, which the Claude
-directory lists, and zipped for the ChatGPT plugin directory:
+to the `solibo-home/` folder of the public repository
+`Solibo-AS/solibo-home-claude-plugin`, which the Claude directory lists, and zipped for the ChatGPT plugin directory:
 
 | File | Host |
 |------|------|

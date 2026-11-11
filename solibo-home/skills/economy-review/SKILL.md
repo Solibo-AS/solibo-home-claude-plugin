@@ -48,6 +48,31 @@ The usual monthly set is `search_expenses`, `get_accounting_overview`, `get_invo
 - `get_loans`, `get_insurances` and `get_economic_reports` with `companyId`; loan and policy numbers are
   masked to the last four digits.
 
+## Expense claims and receipts
+
+- `create_expense` takes the claim fields and optional `files[]` plus `attachments[]`: each source is
+  exactly one `fileId` matching `files[].file_id` or an existing `sourceDocumentId` from document
+  discovery. It accepts attachments only, with no image, inline documents or removals. Preview the
+  claim and receipts together, then after approval `confirm_pending_write` with only `previewId` and
+  `confirmed` true.
+- A new file needs a downloadable HTTPS `file.download_url` on a public host and a caller-chosen `file.file_id`.
+  Signed links work without extra authorization headers. A client attachment, including a Claude local
+  attachment, works only if the client supplies that URL. Never invent URLs, pass base64 or ask the user
+  to publish private receipts. Limits: configured per-file maximum (default 20 MB), ten new files,
+  fifty document sources and 50 MB of total transfers, counting each repeated use.
+- If the client cannot transfer bytes, use `get_document_upload_options` with the company and optionally
+  `documentType` EXPENSE and an existing expense ID as `belongsToId`. It checks company access and
+  returns an authenticated Home link plus instructions. It opens the expenses area, not an upload modal;
+  the user selects the existing expense and uploads manually. Discover the resulting `sourceDocumentId`
+  with `browse_document_folder` before reusing it.
+- Expense creation precedes sequential receipt attachments. Check `expenseCreated`, `attachmentsComplete`,
+  `documentIds` and `attachmentResults` (ATTACHED, REFUSED, OUTCOME_UNKNOWN, NOT_ATTEMPTED).
+  `attachmentRecovery` identifies the existing claim when receipts are incomplete. Never recreate the
+  expense to retry a receipt. First inspect `browse_document_folder` with `documentType` EXPENSE and
+  `belongsToId` the expense ID before retrying any OUTCOME_UNKNOWN receipt. Attach only missing receipts
+  with `upload_document` using that category/owner and exactly one `file` or `sourceDocumentId`, or
+  use the Home upload handoff. Reuse downloads no bytes; do not set `fileName` or `parentId` for it.
+
 ## Approvals
 
 Every approval or rejection is a preview followed by a confirmation. The user names the exact item
@@ -56,6 +81,9 @@ Every approval or rejection is a preview followed by a confirmation. The user na
 - Expenses: find the item with `search_expenses` scoped to the company, then `accept_expense` or
   `reject_expense` (`reason` is shown to the submitter; rejecting needs board-member access). Show the
   preview, and after the user approves call `confirm_pending_write` with `previewId` and `confirmed` true.
+  An expense needs two approvals from different people: after `accept_expense` read `fullyApproved` and
+  `approvalsGiven` in the result and say "approved" only when `fullyApproved` is true. A second approval by
+  the same person, an expense without a receipt and an already approved expense are refused before a preview.
 - Supplier invoices: `get_company_supplier_invoice_approval_status` gives `forApprovalInvoiceIds` and
   `invoices[].tripletexId`. If `invoiceRowsUnavailable` is true there are no ids and approval must happen in
   Solibo Home; say so. `approve_supplier_invoice` or `reject_supplier_invoice` take `invoiceId` set to the
@@ -69,9 +97,10 @@ check Solibo Home before repeating.
 
 ## Identifiers
 
-KID numbers, bank account numbers, loan numbers and policy numbers are masked by default. Use
-`reveal_loan_numbers` or `reveal_insurance_policy_numbers` only for one narrow purpose the user has stated
-and approved; they are audited and default to five rows. Decline "all identifiers" exports and offer a masked
+KID numbers, bank account numbers (also an expense's payout `account`), loan numbers and policy numbers are
+masked by default. Use `reveal_loan_numbers`, `reveal_insurance_policy_numbers` or
+`reveal_expense_account_numbers` only for one narrow purpose the user has stated and approved; they are
+audited and default to five rows. Decline "all identifiers" exports and offer a masked
 report instead.
 
 ## Answer shape

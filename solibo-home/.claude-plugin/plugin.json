@@ -1,7 +1,7 @@
 {
   "name": "solibo-home",
   "displayName": "Solibo Home",
-  "version": "1.2.0",
+  "version": "1.4.0",
   "description": "Use Solibo Home with your own account. Board members and property managers can review issues, meetings, documents and invoices for their housing communities; residents can find practical information, their invoices and conversations. Changes are saved only after you confirm, and the assistant sees only what your account may see.",
   "author": {
     "name": "Solibo AS",

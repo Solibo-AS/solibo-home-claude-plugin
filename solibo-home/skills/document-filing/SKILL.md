@@ -36,25 +36,45 @@ description: "Documents and files of a housing community in Solibo Home: find a 
 
 ## Upload
 
-- A file exists for an upload only when the conversation holds an attached file reference (a file id with its
-  download URL) or the user gave a public HTTPS link. When the user says "this file" and neither is there,
-  ask for the file, the document type and the folder before any preview; never invent a file reference.
-- `upload_document` with `companyId`, `documentType`, and `file` (a ChatGPT-attached file, or any public
-  HTTPS link with a file_id you choose and the download_url); `fileName` only for a rename the user asked
-  for; `parentId` for the folder; `belongsToId` when the file belongs to a case, meeting or section. The
-  preview stages the bytes; after approval, `confirm_pending_write` with `previewId` and `confirmed` true
-  saves it. Never resend the file, its bytes or its name on the confirmation.
-- Several files: one preview and one confirmation per file, in order; say how many confirmations to expect.
-- Files meant for a post, newsletter, conversation reply or case go on that tool's `attachments`,
-  `inlineDocuments` or `files`; a separate upload is not needed and a CONVERSATION upload is visible to
-  every participant, residents included.
+- New uploads require a downloadable HTTPS `file.download_url` on a public host and a caller-chosen
+  `file.file_id`, with optional `file.file_name` and `file.mime_type`. Signed links and links from other connectors
+  work when they download without extra authorization headers. A client attachment works only when
+  the client provides that URL; a Claude local attachment ID alone does not. Never invent a URL,
+  send base64 or ask the user to publish a private file.
+- If the client cannot transfer the file, call `get_document_upload_options` with `companyId` and
+  optionally `documentType` and `belongsToId`. Present its authenticated Home link and instructions.
+  The link opens the company documents/expenses area, not an upload modal. The user signs in, selects
+  the intended category or existing record and uploads manually. Then discover its `sourceDocumentId`
+  with `search_documents` or `browse_document_folder` and reuse it.
+- `upload_document` takes `companyId`, `documentType`, and exactly one `file` reference or existing
+  `sourceDocumentId`. Set `belongsToId` when the file belongs to an issue, meeting, expense or section.
+  For a new file, `parentId` selects the folder and `fileName` is only for a requested rename or missing
+  filename. Existing-source reuse requires a positive `belongsToId` for an existing record, preserves
+  the source filename, accepts neither `parentId` nor `fileName`, and downloads no bytes. It cannot
+  copy a file into a generic folder or category root.
+  Show the preview, then after approval call `confirm_pending_write` with only `previewId` and
+  `confirmed` true. Never resend file inputs on confirmation.
+- Several standalone files: one preview and one confirmation per file, in order; say how many to expect.
+- Use integrated `files` and `attachments` on homepage posts, practical information, email newsletters,
+  conversation creation/replies or draft conversation updates, and expense creation. Inline documents
+  are supported on those communication tools, but expenses take attachments only. For cases/issues,
+  meetings and other tools without integrated inputs, use `upload_document` with the correct category
+  and owner after that record exists. A CONVERSATION upload is visible to every participant, residents
+  included.
+- New-file limit: configured per-file maximum, default 20 MB. Integrated tools allow ten files,
+  fifty document sources and 50 MB transferred in total, counting repeated uses of the same file.
+- If expense receipt attachment fails after the claim was created, never recreate the claim. Inspect
+  documents with `browse_document_folder`, `documentType` EXPENSE and `belongsToId` the existing expense
+  ID before retrying an unknown outcome; attach only missing receipts to that expense.
 
 ## Organise
 
 - `create_document_folder` (`documentType`, `folderName`, `parentId`), `rename_document` (`fileName` is the
   new name), `move_document` (`parentId` is the target folder).
 - `trash_document` is reversible with `restore_document`; `delete_document` only when the user explicitly
-  asks for deletion.
+  asks for deletion. Only archive documents of type OTHER or BUILDING can be trashed: a document that
+  belongs to a record (a loan or insurance agreement, an expense receipt, a meeting attachment) is refused
+  whatever the user's role, so tell the user that instead of blaming their access.
 - Many documents at once: `batch_update_documents` with `operation` MOVE, TRASH or RESTORE and
   `documentIds` (up to 100; root folder ids only), one preview and one confirmation.
 

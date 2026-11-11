@@ -6,17 +6,21 @@ description: "Suppliers (leverandører) of a housing community in Solibo Home: f
 # Supplier register
 
 Two ids exist: the catalogue supplier id, which every company-supplier tool takes as `supplierId`, and the
-relationship id (`items[].id` of `search_company_suppliers`), which none of them takes. The `supplierId` in
+relationship id (`items[].id`, also `items[].companySupplierId`, of `search_company_suppliers`), which none of
+them takes. The `supplierId` in
 accounting entries is a third, company-local id and does not work here either.
 
 ## Find
 
 1. Resolve the company; `set_working_company` for a session about one company.
-2. `search_company_suppliers` with `companyId` and `search` lists the company's suppliers:
+2. `search_company_suppliers` with `companyId` and `search` (name or organisation number) or `category`
+   (service categories, matched exactly) lists the company's suppliers:
    `items[].supplierId` (pass this onward), `name`, `orgNr`, `serviceCategories`.
-3. `get_company_supplier` with `supplierId` adds `comments[]` (each with `id`, `content`, `emoticon`).
+3. `get_company_supplier` with `supplierId` adds `comments[]` (each with `id`, `content`, `emoticon`);
+   `commentsAvailable` false means the comments could not be read, not that there are none.
 4. The shared catalogue: `search_suppliers` by name, `search_suppliers_by_orgnr` with `orgNrs`; both
-   return `items[].id` (the catalogue id), `name`, `orgNr`. A permission error means the account may not
+   return `items[].id` (the catalogue id, also `supplierId`), `name`, `orgNr`; the latter lists numbers
+   without a supplier in `notFoundOrgNrs`. A permission error means the account may not
    browse the catalogue; say so.
 5. `search_organizations` and `get_organization` find organisations that are not suppliers yet.
 
@@ -24,20 +28,27 @@ accounting entries is a third, company-local id and does not work here either.
 
 - `create_company_supplier` needs `companyId`, `name` and `orgNr`, all three. Find the organisation
   number first with `search_suppliers_by_orgnr`, `search_suppliers` or `search_organizations`; never guess
-  it. With a working company set, omit `companyId`. Preview, user approval, then `confirm_pending_write`
+  it. A number the catalogue lacks creates a new catalogue supplier with the given name; a known one is
+  linked under its catalogue name. With a working company set, omit `companyId`. Preview, user approval, then `confirm_pending_write`
   with `previewId` and `confirmed` true.
 - `update_company_supplier_categories` with either `serviceCategories` (the final list; an empty list
   clears) or `addServiceCategories` and `removeServiceCategories`, not both.
-- `add_supplier_comment` (`content`, optional `emoticon` such as THUMBS_UP) and
-  `set_supplier_comment_emoticon` (`commentId` from `get_company_supplier`; omit `emoticon` to clear).
-- `delete_company_supplier` removes the company's link to the supplier (destructive; confirm).
+- `add_supplier_comment` (`content`, optional `emoticon`: one of creative, excited, wondering, happy, sad,
+  thumbsy; Solibo Home refuses other values) and
+  `set_supplier_comment_emoticon` (`commentId` from `get_company_supplier`; omit `emoticon` to clear; a
+  comment id that is not on the supplier is refused before the preview).
+- `delete_company_supplier` removes the company's link to the supplier (destructive; confirm). The preview
+  shows the stored supplier name; an optional `name` is a safeguard that must match it.
 
 ## Contacts
 
 `list_company_supplier_contacts` with `companyId` and `supplierId` (keep paging even when a page returns
 zero rows for that supplier); contact details appear only with `includeFields`. `create_supplier_contact`
-needs `name` and `email` or `mobile`, from values the user supplied; `update_supplier_contact` keeps
-omitted fields and refuses to clear both email and mobile; `delete_supplier_contact` is destructive.
+needs `name` (full name, given name first; the last word is stored as the family name unless
+`familyName` says otherwise) and `email` or `mobile`, from values the user supplied;
+`update_supplier_contact` keeps omitted fields and refuses to clear both email and mobile;
+`delete_supplier_contact` is destructive, shows the stored contact name and refuses a `contactId` that is
+not on the supplier.
 
 ## Import from the accounting entries
 

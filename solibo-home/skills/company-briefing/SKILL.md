@@ -32,7 +32,7 @@ already read those sources together.
 |---|---|
 | Board briefing, "prepare me", morning brief, priorities, what needs attention | `get_board_report`: open with `answerDraft`, then `counts`, then `priorities[]` (each has `reason`, `recommendedAction`, `markdownLink`). `limit` and `priorityLimit` size the lists; `responseLanguage` sets the language of the draft. |
 | Broad status: profile, board, conversation counts, cases, tasks, meetings, economy summary | `get_company_snapshot` |
-| What is new or recent | `get_company_activity_digest` (samples of 10 conversations, cases and tasks, 5 meetings and ownership changes; `pendingTasks` is never complete) |
+| What is new or recent | `get_company_activity_digest` (samples of 10 conversations, cases and tasks, 5 meetings and ownership changes; `pendingTasks` is never complete). For "since Monday", pass `since`: it narrows new conversations, open cases and ownership changes, not meetings or tasks |
 | Several companies ranked by workload | `get_portfolio_overview` with `status` ACTIVE and `count` up to 1000; `answerDraft` opens the answer |
 | Profile only: organisation number, administrators, business agreement, addresses | `get_company` |
 

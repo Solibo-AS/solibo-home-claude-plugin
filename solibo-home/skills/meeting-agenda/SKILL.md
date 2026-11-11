@@ -14,7 +14,9 @@ description: "Board meetings (styremøter, årsmøter) in a housing community in
    take raw values (PLANNING, NOTIFIED, IN_PROGRESS, TO_SIGN, SIGNED). The user often knows the date, not
    the id.
 3. `get_meeting_prep` with `meetingId` is the briefing: `meeting`, `agendaIssues[]` (issue id, title,
-   status, responsible, description), `recentConversations[]`, `boardSummary`, `answerGuidance`. Drill into
+   status, responsible, description, and what this meeting holds for it: `report`, `meetingResolution`,
+   `treated`, `followUp`; `lastResolution` only once the meeting is closed), `recentConversations[]`,
+   `boardSummary`, `answerGuidance`. Drill into
    `get_issue` for proposed resolutions and comments, `search_documents` for board papers (type MEETING or
    ANNUAL_MEETING, or the subject words), and `get_conversation` for a referenced thread.
 4. `get_meeting` only when participant details, RSVP, attendance or the agenda order (`issues[].sequence`)
@@ -41,11 +43,16 @@ Several cases for one meeting: one preview and one confirmation per case, in ord
 many confirmations to expect. For the same case in many companies use `create_issues_for_companies` with
 `companyIds` and `titleTemplate`; it does not attach to meetings.
 
-Later changes: `update_issue` (title, description, `proposedResolution`), `update_issue_report` for the
-protocol text, `update_issue_conclusion` with the final `resolution`, `update_issue_responsible`,
+Later changes: `update_issue` (title, description, `proposedResolution`), `update_issue_responsible`,
 `create_issue_comment`, `add_issue_conversation` and `add_issue_section` to link a thread or a section,
 `reorder_meeting_issue` (`beforeIndex`), `remove_issue_from_meeting` (the case survives), `close_issue`
 and `reopen_issue`.
+
+`update_issue_report` (protocol text) and `update_issue_conclusion` (`resolution`) only work while the
+case is on the agenda of a meeting that is not closed: Solibo Home stores both on that meeting's agenda
+row. A closed case, or one on no agenda, is refused with the reason. Read them back with `get_issue`
+(`currentMeeting.report`, `currentMeeting.resolution`) or `get_meeting` (`issues[]`); `lastResolution`
+is filled only when the meeting has been closed.
 
 ## Create or change a meeting
 
@@ -57,19 +64,41 @@ and `reopen_issue`.
 - `update_meeting_participants` replaces the bucket you pass (`participantIds`, `guestParticipantIds`,
   `externalParticipants`); omitted buckets are kept, an empty list clears one. Added or removed people
   may be emailed if the meeting was already notified.
-- `send_meeting_summons` (optional `comment`) notifies every participant of the meeting: board members,
-  guests and external participants alike. Show the participant list from `get_meeting` first so the user
-  approves the whole audience; it is a communication preview confirmed with `confirm_pending_communication`,
-  only after the user approves the meeting, the audience and the text.
+- `send_meeting_summons` (optional `comment`) emails every participant of the meeting: board members,
+  guests and external participants alike. Its preview names the recipients and their number; show that
+  list so the user approves the whole audience. It is a communication preview confirmed with
+  `confirm_pending_communication`, only after the user approves the meeting, the audience and the text.
+  A closed meeting or one without participants is refused.
 
 ## During and after the meeting
 
+`get_meeting` gives each participant two ids. `participantId` (the same value as `id`) is the row in
+this meeting; `personId` is the person. `mark_meeting_attendance` and `rsvp_meeting` (`participantId`)
+and `mark_meeting_participant_signed` (`attendeeId`) take the participant id; a participant's person id
+there is translated to it, and any other id is refused before the preview with the valid ids.
+`send_meeting_signature_reminder` `idsToSign` takes person ids and translates a participant id to the
+person; `update_meeting_participants` takes person ids.
+
 `start_meeting`, `mark_meeting_attendance` (`participantId`, `attended`), `mark_meeting_issue_treated`
-(one-way), `set_meeting_issue_follow_up` (`shouldFollowUp`), `close_meeting`, `reopen_meeting`.
-Signing: `send_meeting_signature_reminder` (`idsToSign`, communication confirm),
-`mark_meeting_participant_signed` (`attendeeId` from `get_meeting`), `finalize_meeting_signing` (forces
-signed; Solibo superuser only). `rsvp_meeting` records YES, NO or MAYBE for a participant (`participantId` from `get_meeting`). Follow-up to-dos that
-are not cases go in `create_task` (`title`, `dueDate` as a timestamp, `responsibleId`).
+(one-way), `set_meeting_issue_follow_up` (`shouldFollowUp`); `get_meeting` shows both flags on
+`issues[]` as `treated` and `followUp`. `close_meeting` needs at least two participants marked as
+attended; the meeting then has status TO_SIGN (closed, awaiting signatures; there is no CLOSED status)
+and Solibo Home emails a signature request to the attending board members. It becomes SIGNED when they
+have all signed or been marked signature-unavailable.
+
+`reopen_meeting` only applies to a closed meeting and discards the signing: all signatures and
+signature-unavailable marks are cleared and the protocol document is deleted. `delete_meeting` on a
+closed meeting destroys the same. Both previews list exactly what would be lost; show that to the user
+and get an explicit yes before confirming.
+
+Signing: `send_meeting_signature_reminder` (optional `idsToSign` with person ids, communication
+confirm; the preview names who is reminded and counts only those `get_meeting` shows with a board role,
+since Solibo Home emails current board members only; a participant marked signature-unavailable is left
+out), `mark_meeting_participant_signed` (`attendeeId` is the
+participant id from `get_meeting`), `finalize_meeting_signing` (forces signed; Solibo superuser only).
+`rsvp_meeting` records YES, NO or MAYBE for a participant (`participantId` from `get_meeting`).
+Follow-up to-dos that are not cases go in `create_task` (`title`, `dueDate` as a timestamp,
+`responsibleId`).
 
 ## Guardrails
 
