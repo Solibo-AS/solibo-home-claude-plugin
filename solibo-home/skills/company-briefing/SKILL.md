@@ -54,7 +54,8 @@ already read those sources together.
 Run `initialize_session_context`, then `get_my_conversations` with `unread` true (keep the same `unread`
 value when paging; the whole queue has no total count), then `search_tasks` with `companyIds` set to the
 user's companies, `completed` false and `dueDateTo` yesterday for overdue tasks (a date bound covers that whole
-Oslo day, so tasks due today are a separate list; follow `paging.next`), then for
+Oslo day, so tasks due today are a separate list; follow `paging.next`), then `get_my_follow_ups` for the
+user's own supplier invoices and expenses to approve and protocols to sign across all their companies, then for
 each company where the user approves invoices `get_company_supplier_invoice_approval_status`, and only then
 `get_conversation` for the two or three threads worth summarising. Do not open every conversation: summarise from titles, counts and
 `readByCurrentUser`, and name the threads that need a reply.

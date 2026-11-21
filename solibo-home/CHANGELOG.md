@@ -7,6 +7,14 @@ and plugin versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.4.1] - 2026-11-21
+
+### Changed
+
+- `economy-review` and `meeting-agenda` no longer label tools by the role that may use them ("Solibo staff
+  only", "Solibo superuser only"); they say the tool works when the user's access includes it, matching the
+  tool descriptions since 2026-11-21. The server still withholds those tools from callers without access.
+
 ## [1.4.0] - 2026-11-11
 
 ### Changed
