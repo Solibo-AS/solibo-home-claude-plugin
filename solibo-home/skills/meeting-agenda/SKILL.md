@@ -95,7 +95,7 @@ Signing: `send_meeting_signature_reminder` (optional `idsToSign` with person ids
 confirm; the preview names who is reminded and counts only those `get_meeting` shows with a board role,
 since Solibo Home emails current board members only; a participant marked signature-unavailable is left
 out), `mark_meeting_participant_signed` (`attendeeId` is the
-participant id from `get_meeting`), `finalize_meeting_signing` (forces signed; Solibo superuser only).
+participant id from `get_meeting`), `finalize_meeting_signing` (forces signed; refused unless the user's access includes it).
 `rsvp_meeting` records YES, NO or MAYBE for a participant (`participantId` from `get_meeting`).
 Follow-up to-dos that are not cases go in `create_task` (`title`, `dueDate` as a timestamp,
 `responsibleId`).

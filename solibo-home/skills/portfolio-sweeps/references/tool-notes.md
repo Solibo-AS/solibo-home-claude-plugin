@@ -22,6 +22,8 @@ Staff-only tools are hidden from non-staff lists: `get_staff_portfolios`, `set_a
 | `search_invoicing_customers_for_companies` | none | `companyIds`, `search`, `active`, `customerType`, `count` (100), `pageToken`, `includeFields` | `items[].{id,companyId,active,type,name,sectionIds}` |
 | `get_queued_invoices_for_companies` | none | `companyIds`, `count` (50), `pageToken` | `items[].{companyId,invoice.{id,payerName,invoiceDate,dueDate,claim,lineCount}}` |
 | `get_invoicing_settings_for_companies` | none | `companyIds`, `count` (100), `pageToken` | `items[].{id,companyId,paperTax,paperTaxAccount}` |
+| `get_invoicing_overdue_delays_for_companies` | none | `companyId` or `companyIds`, `state` (FUTURE, ACTIVE, ENDED), `count` (100), `pageToken` | `items[].{companyId,companyName,invoiceId,invoiceNumber,customerName,dueDate,state,delayStart,delayEnd,nextStep.{step,at,suspended}}`, `paging.next` |
+| `list_recent_tenant_registrations` | none | `companyIds`, `registeredAtFrom` (ISO date; default the last 30 days), `count` (100), `pageToken` | `items[].{companyId,companyName,sectionId,streetAddress,apartmentNr,residentType,residentName,registeredAt,validFrom,validTo}`, `appliedWindow`, `paging.next` |
 | `get_invoicing_accounts` | `companyId` | `count`, `pageToken` | `items[].{id,name,accountNumber (masked),bank}`; not found when the company does not invoice |
 | `search_invoicing_plans` | `companyId` | `active`, `type`, `count` (5), `pageToken` | `items[].{id,name,active,type}` |
 | `get_invoice_plan` | `companyId`, `planId` | `at` | `name`, `active`, `type`, `nextPreview`, `settings`, `distributions[]`, `transactions[]`, `lines[]` |

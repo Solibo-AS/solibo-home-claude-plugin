@@ -15,6 +15,8 @@
 | `update_company_supplier_categories` | preview, write confirm | `companyId`, `supplierId`, and `serviceCategories` or `addServiceCategories`/`removeServiceCategories` | none | `serviceCategories` |
 | `add_supplier_comment` | preview, write confirm | `companyId`, `supplierId`, `content` | `emoticon` (creative, excited, wondering, happy, sad, thumbsy) | `commentId`, `emoticon` |
 | `set_supplier_comment_emoticon` | preview, write confirm | `companyId`, `supplierId`, `commentId` | `emoticon` (same moods; omit to clear) | `action`, `emoticon`, `previousEmoticon` |
+| `update_supplier_comment` | preview, write confirm | `companyId`, `supplierId`, `commentId`, `content` (the full new text) | `emoticon` (same moods; omit to keep), `clearEmoticon` | `action`, `content`, `emoticon`, `previousEmoticon` |
+| `delete_supplier_comment` | preview, write confirm, destructive | `companyId`, `supplierId`, `commentId` | none | `action`, `deleted` |
 | `list_company_supplier_contacts` | read | `companyId` | `supplierId`, `count` (100), `pageToken`, `includeFields` | `items[].{contactId,supplierId,name,title,email,mobile}`, `returnedCount` |
 | `create_supplier_contact` | preview, write confirm | `companyId`, `supplierId`, `name`, `email` or `mobile` | `title`, `familyName` | `contactId`, `name` (as stored) |
 | `update_supplier_contact` | preview, write confirm | `companyId`, `supplierId`, `contactId`, one of `name`, `email`, `mobile`, `title` | `familyName` (with `name`) | `action` updated, `name` (as stored) |

@@ -49,6 +49,10 @@ tool and one confirmation.
 - `create_internal_note` is visible to staff and board only; `documentIds` may name existing documents.
   Confirm with `confirm_pending_write`. `get_conversation` returns the notes in `internalNotes`; never quote
   them in a reply the resident sees.
+- `delete_internal_note` removes a note written by mistake (`messageId` from `internalNotes`) and
+  `restore_internal_note` brings it back; only the note's author can do either, and nobody is notified.
+  Both confirm with `confirm_pending_write`. A deleted note no longer shows in `get_conversation`;
+  `restore_internal_note`'s refusal lists the caller's deleted note ids.
 - New threads: `create_conversation` with `title` and `participants` (each `participantId` from
   `search_persons`, `search_residents` or `search_organizations`, with `participantType`); or
   `create_conversation_inquiry` with a contact `categoryId` from the meta call. Both confirm through
@@ -86,13 +90,16 @@ single-thread calls:
 | Flag or unflag | `flag_conversations` | `flagged` |
 | Close, reopen | `close_conversations`, `reopen_conversations` | none |
 | Trash, restore | `trash_conversations`, `restore_conversations` | none |
+| Spam, not spam | `mark_conversations_spam`, `mark_conversations_not_spam` | none |
 
 `move_conversation_to_folder` and `mark_conversation_read` exist for a single thread; with two or more
 ids use the bulk tool. `delete_conversations` is a soft delete that only works on drafts (unless the user
 is a super user, whose published threads go to the trash instead); Solibo Home refuses the whole call if
 any selected thread is published. The result says which went: `deletedIds`, `trashedIds`. Use trash for
 published threads, or when the user may want the threads back. `delete_conversation_folder` deletes the
-folder's subfolders too; its preview names them. A new folder comes from `create_conversation_folder` (`name`, optional `parentId`).
+folder's subfolders too; its preview names them. Spam is hidden from `search_conversations` unless
+`status` includes SPAM; a thread marked as spam loses its folder and status, and removing the mark brings it
+back as NEW at the top level (and notifies the category's responsibles when the email filter had put it in spam). A new folder comes from `create_conversation_folder` (`name`, optional `parentId`).
 
 Each bulk call returns a preview listing the ids and the action. Show the count and the folder or status,
 get the user's approval, then `confirm_pending_write` with `previewId` and `confirmed` true. A result whose
