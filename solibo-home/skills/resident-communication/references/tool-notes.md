@@ -34,6 +34,16 @@ strings except `directRecipientPersonIds`, `directRecipientOrganizationIds` and 
 | `create_feed_posts_for_companies`, `create_practical_info_for_companies` | preview, write confirm | `companyIds` (max 500), `titleTemplate`, `contentTemplate` | notify groups, `private`, `pinned`, `publishedAt`, `draft` | `items[].{companyId,entityId,status,warnings}`, `unresolvedPlaceholders` |
 | `list_homepage_posts` | read | `companyId`, `postKind` FEED or PRACTICAL_INFORMATION | `search`, `count` (20), `pageToken` | `items[].{id,title,pinned,private,publishedAt}` |
 | `get_homepage` | read | `companyId` | `feedCount` | `feed[]`, `practicalInformation[]` |
+| `list_homepage_post_comments` | read | `companyId`, `postId` | `commentId`, `count`, `pageToken` | `comments[].{id,authorName,text,textTruncated,status,createdAt,editedAt,replies[]}`, `contentNotice`, `paging.next` |
+| `list_neighborhood_groups` | read | `companyId` | `count`, `pageToken` | `groups[].{id,title,description,status,followerCount,followedByMe}`, `paging.next` |
+| `list_neighborhood_posts` | read | `companyId` | `groupId` (omit for the common feed), `count`, `pageToken` | `posts[].{id,groupId,title,categories,text,authorName,status,commentsEnabled,commentCount,lastActivityAt}`, `paging.next` |
+| `get_neighborhood_post` | read | `companyId`, `postId` | `commentId`, `commentCount`, `commentPageToken` | `post`, `comments[]` (with `replies[]`), `commentsPaging.next` |
+| `create_homepage_post_comment`, `create_neighborhood_post_comment` | preview, communication confirm | `companyId`, `postId`, `content` | `parentCommentId` (a top-level comment) | `commentId`, `parentCommentId`, `action` |
+| `update_homepage_post_comment`, `update_neighborhood_post_comment` | preview, communication confirm | `companyId`, `postId`, `commentId` (the user's own), `content` | none | `commentId`, `action` |
+| `delete_homepage_post_comment`, `delete_neighborhood_post_comment` | preview, communication confirm, destructive | `companyId`, `postId`, `commentId` (the user's own) | none | `commentId`, `action` |
+| `create_neighborhood_post` | preview, communication confirm | `companyId`, `title`, `content` | `groupId`, `categories` | `postId`, `groupId`, `status`, `action` |
+| `update_neighborhood_post` | preview, communication confirm | `companyId`, `postId` (the user's own) | `title`, `content`, `categories` (`[]` clears) | `postId`, `action` |
+| `delete_neighborhood_post` | preview, communication confirm, destructive | `companyId`, `postId` (the user's own) | none | `postId`, `action` |
 | `send_letter`, `send_company_letter` | preview, communication confirm | `fullName`, `addressLineOne`, `postalArea`, `city` (+ `companyId` for the second), and `content` or `contentLines` | `subject`, `orgnr`, `personId`, `forcePrintJob` | `letterId`, `messageId` |
 | `confirm_pending_communication` | confirm | `previewId`, `confirmed` true | none | `pendingAction.{status,executed,dryRun}`, `result` |
 

@@ -37,6 +37,10 @@ accounting entries is a third, company-local id and does not work here either.
   thumbsy; Solibo Home refuses other values) and
   `set_supplier_comment_emoticon` (`commentId` from `get_company_supplier`; omit `emoticon` to clear; a
   comment id that is not on the supplier is refused before the preview).
+- `update_supplier_comment` replaces a comment's text (`commentId`, `content`) and keeps its mood unless
+  `emoticon` or `clearEmoticon` true says otherwise; Solibo Home keeps no earlier text.
+  `delete_supplier_comment` deletes a comment permanently (destructive). Anyone who may change the
+  supplier can edit or delete any of its comments, not only their own.
 - `delete_company_supplier` removes the company's link to the supplier (destructive; confirm). The preview
   shows the stored supplier name; an optional `name` is a safeguard that must match it.
 

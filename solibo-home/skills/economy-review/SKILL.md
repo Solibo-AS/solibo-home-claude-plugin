@@ -19,6 +19,10 @@ here is `get_unapproved_invoices_overview`.
 3. `get_economy_status` for available funds and bank balances. `availability` is AVAILABLE, UNAVAILABLE,
    NOT_CONFIGURED, FORBIDDEN or UNKNOWN and describes bank statements only; an omitted amount is not zero;
    `source` SYNTHETIC means fixture data, say so.
+4. When the user's access includes it: `get_bank_account_transactions` lists one bank account's statement transactions, with
+   `bankAccountId` set to a `bankAccounts[].id` from `get_economy_status` and `from`/`to` dates (the last 31
+   days by default, at most 366). Account numbers stay masked; `amount` is an unsigned decimal string, so
+   read `creditDebitIndicator` for the direction.
 
 ## Periodic review
 
@@ -45,8 +49,15 @@ The usual monthly set is `search_expenses`, `get_accounting_overview`, `get_invo
   `get_invoice_history_for_companies` with `companyIds`; `open` true for unpaid. Cursors may start with
   "portfolio:", pass them back unchanged. `get_invoice_payments` lists the payments of one customer invoice
   (`invoiceId` from the history). Keep supplier invoices and customer invoices apart in the answer.
+- When the user's access includes it: `get_customer_ledger` gives one invoicing customer's ledger (kundereskontro):
+  balance, credit, open claims, claimable and unclaimable debt and open postings, plus outstanding and
+  overdue invoice totals on the first page. `customerType` and `customerId` come from a
+  `search_invoicing_customers` row, as for `get_customer_invoices`. If `restarted` is true the ledger
+  changed while paging and the listing began again.
 - `get_loans`, `get_insurances` and `get_economic_reports` with `companyId`; loan and policy numbers are
   masked to the last four digits.
+- `delete_economic_report` cancels a report that is still ORDERED (`reportId` from `get_economic_reports`).
+  It cannot be undone and nobody who got the order email is told; confirm with `confirm_pending_write`.
 
 ## Expense claims and receipts
 

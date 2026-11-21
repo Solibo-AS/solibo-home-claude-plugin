@@ -7,6 +7,30 @@ and plugin versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-11-21
+
+### Added
+
+- `company-briefing`: `get_my_follow_ups` lists the user's own supplier invoices and expenses to approve and
+  protocols to sign across all their companies.
+- `conversation-triage`: `mark_conversations_spam` and `mark_conversations_not_spam` (spam is hidden from
+  `search_conversations` unless `status` includes SPAM), and `delete_internal_note` / `restore_internal_note`
+  for the author's own internal notes.
+- `economy-review`: `get_bank_account_transactions` for one bank account's statement transactions (with the
+  `bankAccounts[].id` that `get_economy_status` now returns), `get_customer_ledger` for one invoicing
+  customer's ledger, and `delete_economic_report` for an ordered report.
+- `portfolio-sweeps`: paused payment reminders (`get_invoicing_overdue_delays_for_companies`) and new tenants
+  and sublets (`list_recent_tenant_registrations`) across companies.
+- `resident-communication`: a section on homepage post comments and the neighbourhood (nabolaget): reading
+  groups, posts and comments, and writing, editing and deleting the user's own comments and posts.
+- `supplier-register`: `update_supplier_comment` and `delete_supplier_comment`.
+
+### Changed
+
+- `economy-review` and `meeting-agenda` no longer label tools by the role that may use them ("Solibo staff
+  only", "Solibo superuser only"); they say the tool works when the user's access includes it, matching the
+  tool descriptions since 2026-11-21. The server still withholds those tools from callers without access.
+
 ## [1.4.0] - 2026-11-11
 
 ### Changed
