@@ -7,6 +7,13 @@ and plugin versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.5.1] - 2026-11-23
+
+### Changed
+
+- The changelog no longer spells out the path of the listing logo. The Claude directory check read the
+  path as an image file that the plugin's code could reach.
+
 ## [1.5.0] - 2026-11-21
 
 ### Added
@@ -97,8 +104,8 @@ and plugin versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.
 - `PluginSkillsContractTest` keeps the skills in step with the tool catalog.
 - `LICENSE` (MIT) and a `license` field in both manifests, as the Claude
   directory requires, with a trademark note in the README.
-- The Claude manifest names the listing icon (`assets/solibo-home-logo.png`,
-  the same file the ChatGPT manifest uses) and the website, support, privacy
+- The Claude manifest names the listing icon (the same logo file the ChatGPT
+  manifest uses) and the website, support, privacy
   and terms URLs, so the directory listing no longer depends on an older
   upload.
 
