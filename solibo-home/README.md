@@ -34,6 +34,11 @@ before a change, and the shape of the answer.
 | `resident-communication` | Newsletters, SMS, feed posts and practical information: audience, notification groups, preview, draft, send or schedule |
 | `meeting-agenda` | Board meetings: find, prepare, add agenda items, follow-ups, summons and signing |
 | `economy-review` | Expenses, supplier invoices, accounting, loans and insurance for one community |
+| `other-invoicing` | Single, recurring and mass customer invoices, including PDF attachments |
+| `common-costs` | Common-cost invoice plans, upcoming charges, scheduled line changes, distribution keys and billing settings |
+| `payment-allocation` | Incoming payments, KID matching, manual registration and allocation corrections |
+| `invoicing-customer-register` | Billing customers, section invoice recipients, invoice delivery details, and paper fees |
+| `receivables-follow-up` | Overdue customer invoices, collection delays, credit notes and ledger claims |
 | `portfolio-sweeps` | Work across many communities with the portfolio tools and correct paging: the user's own companies, or for Solibo staff every assigned company |
 | `document-filing` | Find, read, download, upload, rename and move documents |
 | `supplier-register` | Suppliers and supplier contacts, including imports from accounting entries |

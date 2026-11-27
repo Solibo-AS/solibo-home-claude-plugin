@@ -9,6 +9,11 @@ Work on one company at a time: resolve it and call `set_working_company`, then o
 questions across many companies belong to the portfolio-sweeps skill; the one cross-company read that fits
 here is `get_unapproved_invoices_overview`.
 
+Use common costs for regular common-cost invoice plans and other invoicing for separate customer
+charges. Use receivables follow-up for overdue invoices, collection changes, credits and claims.
+Use payment allocation to handle an incoming payment or correct its allocation. Use the invoicing
+customer register for billing identities, section recipients and delivery settings.
+
 ## Start with what exists
 
 1. `get_economy_readiness`: `accountingAvailable`, `invoicingActive`, `unattestedExpenseCount`,

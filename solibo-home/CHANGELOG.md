@@ -7,6 +7,20 @@ and plugin versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-11-27
+
+### Added
+
+- `common-costs`: preview runs and prepare changes to regular fees, distribution keys, and billing schedules.
+- `other-invoicing`: prepare single, recurring, and mass customer charges, including PDF attachments.
+- `receivables-follow-up`: review arrears and prepare collection delays, invoice corrections, and ledger claims.
+- `payment-allocation`: match incoming payments, prepare allocations and refund vouchers, and handle reversals.
+- `invoicing-customer-register`: manage billing customers, section recipients, and delivery settings.
+
+### Changed
+
+- `economy-review` routes invoicing requests to the dedicated workflows.
+
 ## [1.5.1] - 2026-11-23
 
 ### Changed
